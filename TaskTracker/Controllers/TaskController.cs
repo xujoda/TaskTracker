@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using TaskTracker.Services;
 using Task = TaskTracker.Models.Task;
 
@@ -21,7 +20,7 @@ namespace TaskTracker.Controllers
         {
             if (task == null)
             {
-                return BadRequest("Task is null"); // create error's collection to returns
+                return BadRequest("Task is null"); // todo: create error's collection to returns
             }
 
             var createTask = _taskService.CreateTask(task);
@@ -38,9 +37,9 @@ namespace TaskTracker.Controllers
 
                 return Ok(task);
             }
-            catch (ItemNotFoundException)
+            catch (ItemByIdNotFoundException ex)
             {
-                return NotFound();
+                return NotFound(ex.Message);
             }
         }
 
@@ -52,9 +51,9 @@ namespace TaskTracker.Controllers
                 _taskService.DeleteTaskById(id);
                 return NoContent();
             }
-            catch (ItemNotFoundException)
+            catch (ItemByIdNotFoundException ex)
             {
-                return NotFound();
+                return NotFound(ex.Message);
             }
         }
 
@@ -64,11 +63,11 @@ namespace TaskTracker.Controllers
             try
             {
                 _taskService.UpdateTask(task);
-                return NoContent(); // todo: maybe should return(200) and updated task
+                return Ok();
             }
-            catch (ItemNotFoundException)
+            catch (ItemByIdNotFoundException ex)
             {
-                return NotFound();
+                return NotFound(ex.Message);
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿
+﻿using TaskTracker.Models;
 using Task = TaskTracker.Models.Task;
 
 namespace TaskTracker.Services
@@ -36,7 +36,7 @@ namespace TaskTracker.Services
 
             if (task == null)
             {
-                throw new ItemNotFoundException(taskId);
+                throw new ItemByIdNotFoundException(taskId);
             }
 
             return task;
@@ -65,7 +65,7 @@ namespace TaskTracker.Services
 
             if (originalTask == null)
             {
-                throw new ItemNotFoundException(task.TaskId);
+                throw new ItemByIdNotFoundException(task.TaskId);
             }
 
             originalTask.Title = task.Title;
@@ -86,7 +86,7 @@ namespace TaskTracker.Services
 
             if (originalTask == null)
             {
-                throw new ItemNotFoundException(taskId);
+                throw new ItemByIdNotFoundException(taskId);
             }
 
             _dbContext.Tasks.Remove(originalTask);

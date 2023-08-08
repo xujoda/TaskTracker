@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TaskTracker.Models;
 using Task = TaskTracker.Models.Task;
 
-namespace TaskTracker.Services
+namespace TaskTracker.Models
 {
     public class TrackerDbContext : DbContext
     {

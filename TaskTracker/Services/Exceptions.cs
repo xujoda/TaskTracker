@@ -1,12 +1,22 @@
 ﻿namespace TaskTracker.Services
 {
-    public class ItemNotFoundException : Exception
+    public class ItemByIdNotFoundException : Exception
     {
-        public int itemId { get; }
+        private int _itemId { get; } = 0;
 
-        public ItemNotFoundException(int id) : base($"Item ID = {id} - not found")
+        public ItemByIdNotFoundException(int itemId) : base($"Item ID = {itemId} - not found")
         {
-            itemId = id;
+            _itemId = itemId;
+        }
+    }
+
+    public class ItemByStringNotFoundException : Exception
+    {
+        private string _message { get; } = "";
+
+        public ItemByStringNotFoundException(string message) : base($"Item STRING = {message} - not found")
+        {
+            _message = message;
         }
     }
 }
