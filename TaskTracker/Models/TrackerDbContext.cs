@@ -11,5 +11,16 @@ namespace TaskTracker.Models
         public TrackerDbContext(DbContextOptions<TrackerDbContext> options) : base(options)
         {
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Task>()
+                .HasOne(t => t.User)
+                .WithMany(u => u.Tasks)
+                .HasForeignKey(t => t.User)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
     }
 }

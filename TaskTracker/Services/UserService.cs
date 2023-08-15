@@ -1,4 +1,5 @@
-﻿using TaskTracker.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using TaskTracker.Models;
 
 namespace TaskTracker.Services
 {
@@ -18,8 +19,8 @@ namespace TaskTracker.Services
                 throw new ArgumentNullException(nameof(user));
             }
 
-            _dbContext.Users.Add(user);
-            _dbContext.SaveChanges();
+            _dbContext.Users.AddAsync(user);
+            _dbContext.SaveChangesAsync();
             return user;
         }
 
@@ -30,25 +31,25 @@ namespace TaskTracker.Services
                 throw new ArgumentOutOfRangeException(nameof(userId));
             }
 
-            var user = _dbContext.Users.FirstOrDefault(x => x.UserId == userId);
-            if (user == null)
+            var user = _dbContext.Users.FirstOrDefaultAsync(x => x.UserId == userId);
+            if (user.Result == null)
             {
                 throw new ItemByIdNotFoundException(userId);
             }
 
-            return user;
+            return user.Result;
         }
 
         public List<User> GetAllUsers()
         {
-            List<User> userList = _dbContext.Users.ToList();
+            var userList = _dbContext.Users.ToListAsync();
 
-            if (userList == null)
+            if (userList.Result == null)
             {
                 throw new Exception($"Task list is empty");
             }
 
-            return userList;
+            return userList.Result;
         }
 
         public User GetUserByEmail(string email)
@@ -58,14 +59,14 @@ namespace TaskTracker.Services
                 throw new ArgumentNullException(nameof(email));
             }
 
-            var user = _dbContext.Users.FirstOrDefault(x => x.Email == email);
+            var user = _dbContext.Users.FirstOrDefaultAsync(x => x.Email == email);
 
-            if (user == null)
+            if (user.Result == null)
             {
                 throw new ItemByStringNotFoundException(email);
             }
 
-            return user;
+            return user.Result;
         }
 
         public void DeleteUserById(int userId)
@@ -78,14 +79,14 @@ namespace TaskTracker.Services
             }
 
             _dbContext.Users.Remove(user);
-            _dbContext.SaveChanges();
+            _dbContext.SaveChangesAsync();
         }
 
         public void UpdateUser(User user)
         {
             var originalUser = GetUserById(user.UserId);
 
-            if (user == null)
+            if (originalUser == null)
             {
                 throw new ItemByIdNotFoundException(user.UserId);
             }
@@ -94,7 +95,7 @@ namespace TaskTracker.Services
             originalUser.Password = user.Password;
             originalUser.Email = user.Email;
 
-            _dbContext.SaveChanges();
+            _dbContext.SaveChangesAsync();
         }
     }
 }

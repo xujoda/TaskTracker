@@ -1,4 +1,5 @@
-﻿using TaskTracker.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using TaskTracker.Models;
 using Task = TaskTracker.Models.Task;
 
 namespace TaskTracker.Services
@@ -19,8 +20,8 @@ namespace TaskTracker.Services
                 throw new ArgumentNullException(nameof(task));
             }
 
-            _dbContext.Tasks.Add(task);
-            _dbContext.SaveChanges();
+            _dbContext.Tasks.AddAsync(task);
+            _dbContext.SaveChangesAsync();
 
             return task;
         }
@@ -32,26 +33,26 @@ namespace TaskTracker.Services
                 throw new ArgumentOutOfRangeException(nameof(taskId));
             }
 
-            var task = _dbContext.Tasks.FirstOrDefault(t => t.TaskId == taskId);
+            var task = _dbContext.Tasks.FirstOrDefaultAsync(t => t.TaskId == taskId);
 
-            if (task == null)
+            if (task.Result == null)
             {
                 throw new ItemByIdNotFoundException(taskId);
             }
 
-            return task;
+            return task.Result;
         }
 
         public List<Task> GetAllTasks()
         {
-            List<Task> taskList = _dbContext.Tasks.ToList();
+            var taskList = _dbContext.Tasks.ToListAsync();
 
-            if (taskList == null)
+            if (taskList.Result == null)
             {
                 throw new Exception($"Task list is empty");
             }
 
-            return taskList;
+            return taskList.Result;
         }
 
         public void UpdateTask(Task task)
@@ -77,7 +78,7 @@ namespace TaskTracker.Services
             originalTask.Priority = task.Priority;
             originalTask.UserId = task.UserId;
 
-            _dbContext.SaveChanges();
+            _dbContext.SaveChangesAsync();
         }
 
         public void DeleteTaskById(int taskId)
@@ -90,7 +91,7 @@ namespace TaskTracker.Services
             }
 
             _dbContext.Tasks.Remove(originalTask);
-            _dbContext.SaveChanges();
+            _dbContext.SaveChangesAsync();
         }
     }
 }

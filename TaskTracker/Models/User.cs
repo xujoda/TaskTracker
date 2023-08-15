@@ -15,5 +15,7 @@ namespace TaskTracker.Models
 
         [Required]
         public string Password { get; set; }
+
+        public List<Task> Tasks { get; set; }
     }
 }

@@ -16,12 +16,14 @@ namespace TaskTracker.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateTask(Task task)
+        public IActionResult CreateTask(Task task, int userId)
         {
             if (task == null)
             {
                 return BadRequest("Task is null"); // todo: create error's collection to returns
             }
+
+            task.UserId = userId;
 
             var createTask = _taskService.CreateTask(task);
 

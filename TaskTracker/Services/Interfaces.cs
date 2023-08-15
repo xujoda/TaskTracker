@@ -5,7 +5,7 @@ namespace TaskTracker.Services
 {
     public interface ITaskService
     {
-        Task CreateTask(Task task); // todo: maybe void
+        Task CreateTask(Task task);
         Task GetTaskById(int taskId);
         List<Task> GetAllTasks();
         void DeleteTaskById(int taskId);
@@ -14,7 +14,7 @@ namespace TaskTracker.Services
 
     public interface IUserService
     {
-        User AddUser(User user); // todo: maybe void
+        User AddUser(User user);
         User GetUserById(int userId);
         User GetUserByEmail(string email);
         List<User> GetAllUsers();
