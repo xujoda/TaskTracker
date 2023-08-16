@@ -13,56 +13,56 @@ namespace TaskTracker.Services
             _dbContext = dbContext;
         }
 
-        public Task CreateTask(Task task)
+        public async Task<Task> CreateTask(Task task)
         {
             if (task == null)
             {
                 throw new ArgumentNullException(nameof(task));
             }
 
-            _dbContext.Tasks.AddAsync(task);
-            _dbContext.SaveChangesAsync();
+            var responseTask = await _dbContext.Tasks.AddAsync(task);
+            _ = await _dbContext.SaveChangesAsync();
 
-            return task;
+            return responseTask.Entity;
         }
 
-        public Task GetTaskById(int taskId)
+        public async Task<Task> GetTaskById(int taskId)
         {
             if (taskId < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(taskId));
             }
 
-            var task = _dbContext.Tasks.FirstOrDefaultAsync(t => t.TaskId == taskId);
+            var task = await _dbContext.Tasks.FirstOrDefaultAsync(t => t.TaskId == taskId);
 
-            if (task.Result == null)
+            if (task == null)
             {
                 throw new ItemByIdNotFoundException(taskId);
             }
 
-            return task.Result;
+            return task;
         }
 
-        public List<Task> GetAllTasks()
+        public async Task<List<Task>> GetAllTasks()
         {
-            var taskList = _dbContext.Tasks.ToListAsync();
+            var taskList = await _dbContext.Tasks.ToListAsync();
 
-            if (taskList.Result == null)
+            if (taskList == null)
             {
                 throw new Exception($"Task list is empty");
             }
 
-            return taskList.Result;
+            return taskList;
         }
 
-        public void UpdateTask(Task task)
+        public async void UpdateTask(Task task)
         {
             if (task == null)
             {
                 throw new ArgumentNullException(nameof(task));
             }
 
-            var originalTask = GetTaskById(task.TaskId);
+            var originalTask = await GetTaskById(task.TaskId);
 
             if (originalTask == null)
             {
@@ -78,12 +78,12 @@ namespace TaskTracker.Services
             originalTask.Priority = task.Priority;
             originalTask.UserId = task.UserId;
 
-            _dbContext.SaveChangesAsync();
+            _ = await _dbContext.SaveChangesAsync();
         }
 
-        public void DeleteTaskById(int taskId)
+        public async void DeleteTaskById(int taskId)
         {
-            var originalTask = GetTaskById(taskId);
+            var originalTask = await GetTaskById(taskId);
 
             if (originalTask == null)
             {
@@ -91,7 +91,7 @@ namespace TaskTracker.Services
             }
 
             _dbContext.Tasks.Remove(originalTask);
-            _dbContext.SaveChangesAsync();
+            _ = await _dbContext.SaveChangesAsync();
         }
     }
 }

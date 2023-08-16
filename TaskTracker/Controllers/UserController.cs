@@ -5,7 +5,7 @@ using User = TaskTracker.Models.User;
 namespace TaskTracker.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/user")]
     public class UserController : Controller
     {
         private readonly IUserService _userService;
@@ -25,10 +25,10 @@ namespace TaskTracker.Controllers
 
             var newUser = _userService.AddUser(user);
 
-            return CreatedAtRoute(nameof(GetUserById), new { id = newUser.UserId}, newUser);
+            return CreatedAtRoute(nameof(GetUserById), new { id = newUser.Result.UserId}, newUser.Result);
         }
 
-        [HttpGet]
+        [HttpGet("id/{id}")]
         public IActionResult GetUserById(int id)
         {
             try
@@ -54,7 +54,7 @@ namespace TaskTracker.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("email/{email}")]
         public IActionResult GetUserByEmail(string email)
         {
             try
@@ -67,7 +67,7 @@ namespace TaskTracker.Controllers
             }
         }
 
-        [HttpDelete]
+        [HttpDelete("{userId}")]
         public IActionResult DeleteUserById(int userId)
         {
             try
@@ -82,7 +82,7 @@ namespace TaskTracker.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPut("{userId}")]
         public IActionResult UpdateUser(User user)
         {
             try

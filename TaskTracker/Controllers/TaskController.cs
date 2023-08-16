@@ -5,7 +5,7 @@ using Task = TaskTracker.Models.Task;
 namespace TaskTracker.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/task")]
     public class TaskController : Controller
     {
         private readonly ITaskService _taskService;
@@ -27,10 +27,10 @@ namespace TaskTracker.Controllers
 
             var createTask = _taskService.CreateTask(task);
 
-            return CreatedAtRoute(nameof(GetTaskById), new { id = createTask.TaskId }, createTask);
+            return CreatedAtRoute(nameof(GetTaskById), new { id = createTask.Result.TaskId }, createTask.Result);
         }
 
-        [HttpGet] 
+        [HttpGet("id/{id}")]
         public IActionResult GetTaskById(int id)
         {
             try
@@ -42,6 +42,19 @@ namespace TaskTracker.Controllers
             catch (ItemByIdNotFoundException ex)
             {
                 return NotFound(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult GetAllTasks()
+        {
+            try
+            {
+                return Ok(_taskService.GetAllTasks());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
 

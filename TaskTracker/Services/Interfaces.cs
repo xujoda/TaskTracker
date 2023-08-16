@@ -5,19 +5,19 @@ namespace TaskTracker.Services
 {
     public interface ITaskService
     {
-        Task CreateTask(Task task);
-        Task GetTaskById(int taskId);
-        List<Task> GetAllTasks();
+        Task<Task> CreateTask(Task task);
+        Task<Task> GetTaskById(int taskId);
+        Task<List<Task>> GetAllTasks();
         void DeleteTaskById(int taskId);
         void UpdateTask(Task task);
     }
 
     public interface IUserService
     {
-        User AddUser(User user);
-        User GetUserById(int userId);
-        User GetUserByEmail(string email);
-        List<User> GetAllUsers();
+        Task<User> AddUser(User user);
+        Task<User> GetUserById(int userId);
+        Task<User> GetUserByEmail(string email);
+        Task <List<User>> GetAllUsers();
         void DeleteUserById(int userId);
         void UpdateUser(User user);
     }

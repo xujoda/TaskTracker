@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using TaskTracker.Models;
+using TaskTracker.Services;
 
 namespace TaskTracker
 {
@@ -23,6 +24,9 @@ namespace TaskTracker
 
             builder.Services.AddDbContext<TrackerDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<ITaskService, TaskService>();
 
             var app = builder.Build();
 
