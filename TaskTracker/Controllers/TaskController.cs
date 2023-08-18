@@ -16,7 +16,7 @@ namespace TaskTracker.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateTask(Task task, int userId)
+        public async Task<IActionResult> CreateTask(Task task, int userId)
         {
             if (task == null)
             {
@@ -25,17 +25,17 @@ namespace TaskTracker.Controllers
 
             task.UserId = userId;
 
-            var createTask = _taskService.CreateTask(task);
+            var createTask = await _taskService.CreateTask(task);
 
-            return CreatedAtRoute(nameof(GetTaskById), new { id = createTask.Result.TaskId }, createTask.Result);
+            return CreatedAtRoute(nameof(GetTaskById), new { id = createTask.TaskId }, createTask);
         }
 
         [HttpGet("id/{id}")]
-        public IActionResult GetTaskById(int id)
+        public async Task<IActionResult> GetTaskById(int id)
         {
             try
             {
-                var task = _taskService.GetTaskById(id);
+                var task = await _taskService.GetTaskById(id);
 
                 return Ok(task);
             }
@@ -46,11 +46,11 @@ namespace TaskTracker.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllTasks()
+        public async Task<IActionResult> GetAllTasks()
         {
             try
             {
-                return Ok(_taskService.GetAllTasks());
+                return Ok(await _taskService.GetAllTasks());
             }
             catch (Exception ex)
             {
@@ -59,11 +59,11 @@ namespace TaskTracker.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteTaskById(int id)
+        public async Task<IActionResult> DeleteTaskById(int id)
         {
             try
             {
-                _taskService.DeleteTaskById(id);
+                await _taskService.DeleteTaskById(id);
                 return NoContent();
             }
             catch (ItemByIdNotFoundException ex)
@@ -73,11 +73,11 @@ namespace TaskTracker.Controllers
         }
 
         [HttpPut]
-        public IActionResult UpdateTask(Task task)
+        public async Task<IActionResult> UpdateTask(Task task)
         {
             try
             {
-                _taskService.UpdateTask(task);
+                await _taskService.UpdateTask(task);
                 return Ok();
             }
             catch (ItemByIdNotFoundException ex)

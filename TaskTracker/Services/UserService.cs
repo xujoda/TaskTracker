@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TaskTracker.Models;
+using Threads = System.Threading.Tasks;
 
 namespace TaskTracker.Services
 {
@@ -71,7 +72,7 @@ namespace TaskTracker.Services
             return user;
         }
 
-        public async void DeleteUserById(int userId)
+        public async Threads.Task DeleteUserById(int userId)
         {
             var user = GetUserById(userId);
 
@@ -84,7 +85,7 @@ namespace TaskTracker.Services
             _ = await _dbContext.SaveChangesAsync();
         }
 
-        public async void UpdateUser(User user)
+        public async Threads.Task UpdateUser(User user)
         {
             var originalUser = GetUserById(user.UserId);
 

@@ -16,24 +16,25 @@ namespace TaskTracker.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddUser(User user)
+        public async Task<IActionResult> AddUser(User user)
         {
             if (user == null)
             {
                 return BadRequest("User is null"); // todo: create error's collection to returns
             }
 
-            var newUser = _userService.AddUser(user);
+            var newUser = await _userService.AddUser(user);
 
-            return CreatedAtRoute(nameof(GetUserById), new { id = newUser.Result.UserId}, newUser.Result);
+            return CreatedAtRoute(nameof(GetUserById), new { id = newUser.UserId}, newUser);
         }
 
         [HttpGet("id/{id}")]
-        public IActionResult GetUserById(int id)
+        public async Task<IActionResult> GetUserById(int id)
         {
             try
             {
-                return Ok(_userService.GetUserById(id));
+                var response = await _userService.GetUserById(id);
+                return Ok(response);
             }
             catch (ItemByIdNotFoundException ex)
             {
@@ -42,11 +43,11 @@ namespace TaskTracker.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllUsers()
+        public async Task<IActionResult> GetAllUsers()
         {
             try
             {
-                return Ok(_userService.GetAllUsers());
+                return Ok(await _userService.GetAllUsers());
             }
             catch (Exception ex)
             {
@@ -55,11 +56,11 @@ namespace TaskTracker.Controllers
         }
 
         [HttpGet("email/{email}")]
-        public IActionResult GetUserByEmail(string email)
+        public async Task<IActionResult> GetUserByEmail(string email)
         {
             try
             {
-                return Ok(_userService.GetUserByEmail(email));
+                return Ok(await _userService.GetUserByEmail(email));
             }
             catch (ItemByStringNotFoundException ex)
             {
@@ -68,11 +69,11 @@ namespace TaskTracker.Controllers
         }
 
         [HttpDelete("{userId}")]
-        public IActionResult DeleteUserById(int userId)
+        public async Task<IActionResult> DeleteUserById(int userId)
         {
             try
             {
-                _userService.DeleteUserById(userId);
+                await _userService.DeleteUserById(userId);
 
                 return NoContent();
             }
@@ -83,11 +84,11 @@ namespace TaskTracker.Controllers
         }
 
         [HttpPut("{userId}")]
-        public IActionResult UpdateUser(User user)
+        public async Task<IActionResult> UpdateUser(User user)
         {
             try
             {
-                _userService.UpdateUser(user);
+                await _userService.UpdateUser(user);
 
                 return Ok();
             }

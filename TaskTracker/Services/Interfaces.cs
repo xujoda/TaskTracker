@@ -1,5 +1,6 @@
 ﻿using Task = TaskTracker.Models.Task;
 using User = TaskTracker.Models.User;
+using Threading = System.Threading.Tasks;
 
 namespace TaskTracker.Services
 {
@@ -8,8 +9,8 @@ namespace TaskTracker.Services
         Task<Task> CreateTask(Task task);
         Task<Task> GetTaskById(int taskId);
         Task<List<Task>> GetAllTasks();
-        void DeleteTaskById(int taskId);
-        void UpdateTask(Task task);
+        Threading.Task DeleteTaskById(int taskId);
+        Threading.Task UpdateTask(Task task);
     }
 
     public interface IUserService
@@ -18,7 +19,7 @@ namespace TaskTracker.Services
         Task<User> GetUserById(int userId);
         Task<User> GetUserByEmail(string email);
         Task <List<User>> GetAllUsers();
-        void DeleteUserById(int userId);
-        void UpdateUser(User user);
+        Threading.Task DeleteUserById(int userId);
+        Threading.Task UpdateUser(User user);
     }
 }
